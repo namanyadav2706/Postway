@@ -16,7 +16,7 @@ class UserController{
     }
 
     async signup(req,res){
-        const user = UserModel.create(req.body);
+        const user = await UserModel.create(req.body);
         return res.status(201).send(user)
     }
 }
