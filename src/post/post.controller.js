@@ -25,15 +25,22 @@ class PostController{
     }
 
     async createPost(req, res){
+        let photos = req.files
+        let urls = []
+        photos.forEach((photo) =>{
+            urls.push("images/" + photo.filename); 
+        })
+        req.body.imageURLs = urls;
+        req.body.user_id = req.userid;
         const newPost = await PostModel.create(req.body);
-
         return res.status(201).send(newPost);
+        
     }
 
     async updatePost(req, res){
         const id = req.params.id;
 
-        const updatedPost = await PostModel.findByIdAndUpdate(id,{new:true});
+        const updatedPost = await PostModel.findByIdAndUpdate(id,req.body,{new:true});
         if(!updatedPost){
             return res.status(404).send("No Post Found!")
         }
